@@ -29,7 +29,7 @@
                             <v-text-field
                                     label="Email"
                                     name="email"
-                                    prepend-icon="email"
+                                    prepend-icon="mdi-email"
                                     type="email"
                                     v-model="email"
                                     :rules="emailRules"
@@ -45,7 +45,7 @@
                                     id="password"
                                     label="Password"
                                     name="password"
-                                    prepend-icon="lock"
+                                    prepend-icon="mdi-lock"
                                     type="password"
                                     v-model="password"
                                     :counter="6"
@@ -115,7 +115,7 @@ export default {
                     .then(() => {
                         this.$router.push('/');
                     })
-                    .catch((err) => console.log(err));
+                    .catch((err) => alert(JSON.stringify(err)));
             }
         },
     },

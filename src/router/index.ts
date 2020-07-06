@@ -3,6 +3,8 @@ import VueRouter, {RouteConfig} from 'vue-router';
 import Home from '@/components/Home/Home.vue';
 import Login from '@/components/Auth/Login/Login.vue';
 import Registration from '@/components/Auth/Registration/Registration.vue';
+import History from '@/components/History/History.vue';
+import Scheduler from '@/components/Scheduler/Scheduler.vue';
 
 Vue.use(VueRouter);
 
@@ -22,10 +24,24 @@ const routes: Array<RouteConfig> = [
         name: 'reg',
         component: Registration,
     },
+    {
+        path: '*',
+        redirect: '/',
+    },
+    {
+        path: '/history',
+        name: 'history',
+        component: History,
+    },
+    {
+        path: '/scheduler',
+        name: 'scheduler',
+        component: Scheduler,
+    },
 ];
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     base: process.env.BASE_URL,
     routes,
 });

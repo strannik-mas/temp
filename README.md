@@ -1,4 +1,5 @@
 # client
+node: v10.16.0
 
 ## Project setup
 ```

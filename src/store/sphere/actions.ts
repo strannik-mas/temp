@@ -16,7 +16,9 @@ export const actions: ActionTree<SphereState, RootState> = {
                 params: {api_key: process.env.VUE_APP_API_KEY},
             }).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
-                console.log(data);
+                //console.log(data);
+                //alert(JSON.stringify(data));
+                //alert(`id: ${data.spheres[1].id} name: ${data.spheres[1].name}`);
                 if (data.status === 'success') {
                     Object.keys(data.spheres).forEach((key: any) => {
                         const sphereObj: Sphere = {
@@ -34,6 +36,7 @@ export const actions: ActionTree<SphereState, RootState> = {
                 commit('setError', error.response.data.errors, {root: true});
             });
         } catch (error) {
+            alert(JSON.stringify(error));
             commit('setError', error, {root: true});
             throw error;
         } finally {

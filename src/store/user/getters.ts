@@ -9,10 +9,17 @@ export const getters: GetterTree<ProfileState, RootState> = {
         const lastName = (user && user.lastName) || '';
         return `${firstName} ${lastName}`;
     },
+    email(state): string {
+        const {user} = state;
+        return (user && user.email) || '';
+    },
     userObj(state) {
         return state.user;
     },
     isUserLoggedIn(state) {
-        return (Object.keys(localStorage)).indexOf('token') !== -1 && typeof state.user !== 'undefined';
+        const token = localStorage.getItem('token');
+        alert(JSON.stringify(state));
+        alert(token);
+        return (token !== null && typeof state.user !== 'undefined');
     },
 };

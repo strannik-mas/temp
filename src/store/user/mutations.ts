@@ -2,7 +2,7 @@ import {MutationTree} from 'vuex';
 import {ProfileState, User} from './types';
 
 export const mutations: MutationTree<ProfileState> = {
-    profileLoaded(state, payload: User) {
+    profileLoaded(state, payload: User|undefined) {
         state.error = false;
         state.user = payload;
     },

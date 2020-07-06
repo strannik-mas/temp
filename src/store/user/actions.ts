@@ -59,34 +59,33 @@ export const actions: ActionTree<ProfileState, RootState> = {
     async loginUser({commit}, payload: User) {
         commit('clearError', null, {root: true});
         commit('setLoading', true, {root: true});
+        const user = payload;
 
         const url = `${process.env.VUE_APP_API_URL}auth/client/login`;
         try {
             await axios.post(url, payload).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
-                console.log(data);
                 if (data.status === 'success') {
                     localStorage.setItem('token', data.access_token);
-                    commit('profileLoaded', payload);
+                    user.firstName = data.first_name;
+                    user.lastName = data.last_name;
+                    commit('profileLoaded', user);
                 }
             }, (error) => {
-                console.log(error.response.data.errors);
+                alert(JSON.stringify(error.response.data.errors));
                 commit('setError', error.response.data.errors, {root: true});
                 commit('profileError');
             });
         } catch (error) {
+            alert(JSON.stringify(error));
             commit('setError', error, {root: true});
             throw error;
         } finally {
             commit('setLoading', false, {root: true});
         }
     },
-    /*autoLoginUser ({commit}, payload) {
-        console.log(payload.uid);
-        commit('setUser', new User(payload.uid))
+    logoutUser({commit}) {
+        localStorage.removeItem('token');
+        commit('profileLoaded', undefined);
     },
-    logoutUser ({commit}) {
-        fb.auth().signOut()
-        commit('setUser', null)
-    }*/
 };
