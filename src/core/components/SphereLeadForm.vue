@@ -1,0 +1,449 @@
+<template>
+    <div class="SphereLeadForm pt-2" v-if="typeof sphereById !== 'undefined'">
+        <h1 class="text--primary text-center">Create lead</h1>
+        <h2 class="text--secondary text-center">Sphere: {{sphereById.sphere.name}}</h2>
+        <v-alert
+                v-model="alert"
+                :type="alertType"
+                @close="alert = !alert"
+                dismissible
+                light
+                class="ma-3"
+                id="alertMessage"
+        >{{alertText}}</v-alert>
+        <v-form ref="form" id="leadForm" v-if="alertType !== 'success'">
+            <input type="hidden" name="sphere_id" :value="sphereById.sphere.id">
+            <input type="hidden" name="source" value="client">
+            <div
+                    class="form-group pr-3 pl-3 pb-6"
+                    v-for="(attribute, index) in attributes"
+                    :key="index"
+            >
+                    <v-card
+                        class="mx-auto pl-2 pr-2"
+                        :id="attribute.name"
+                        :height="(attribute.type === 'text' || attribute.type === 'tel'  ||
+                            attribute.type === 'email' || attribute.type === 'date') ? '50px' : 'auto'"
+                        :color="(validationErrors &&
+                                 (typeof validationErrors[attribute.name] !== 'undefined' ||
+                                  typeof validationErrors['fields.' + attribute.name] !== 'undefined')) ?
+                                   '#FFC9C9' : ''"
+                        :style="{
+                            border: '1px solid #c3c3c3',
+                            color: '#585858',
+                            minHeight: '50px',
+                            maxWidth: '600px',
+                            borderRadius: '25px',
+                        }"
+                    >
+                        <v-layout v-if="attribute.type !== 'text'
+                            && attribute.type !== 'tel'  && attribute.type !== 'email' && attribute.type !== 'date'">
+                            <i
+                                    class="ic ma-3"
+                                    :style="{
+                            backgroundImage: 'url(' + attribute.icon + ')'
+                        }"
+                            />
+                            <v-flex xs12 :style="{display: 'inline-block', verticalAlign: 'top'}">
+                                <div class="title contact-attr-title mt-3">
+                                    {{ attribute.label }}
+                                </div>
+                            </v-flex>
+                        </v-layout>
+
+                    <v-flex xs12 class="ma-0 pa-0"
+                            v-if="attribute.type === 'text' || attribute.type === 'tel'  || attribute.type === 'email'"
+                    >
+                        <i
+                                class="ic__text"
+                                :style="{
+                            backgroundImage: 'url(' + attribute.icon + ')'
+                        }"
+                        />
+                        <v-text-field
+                            :type="attribute.type"
+                            :name="attribute.name"
+                            :value="getValue(attribute.name)"
+                            :placeholder="attribute.label"
+                            :hide-details="true"
+                            @input="setColor(attribute.name, attribute.type)"
+                            font-size="1em"
+                            class="ml-10 mt-0 pt-2 custom-placeholer-color"
+                        />
+                        <div class="error--text mt-2" v-if="validationErrors &&
+                                 typeof validationErrors[attribute.name] !== 'undefined'">
+                            <p
+                                    v-for="(error, index) in validationErrors[attribute.name]"
+                                    :key="index"
+                            >{{error}}</p>
+                        </div>
+                    </v-flex>
+
+                    <v-flex xs12 v-if="attribute.type === 'date'">
+                        <i
+                                class="ic__text"
+                                :style="{
+                            backgroundImage: 'url(' + attribute.icon + ')'
+                        }"
+                        />
+                        <v-menu
+                                ref="menu1"
+                                v-model="menu1"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                max-width="290px"
+                                min-width="290px"
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                        v-model="computedDateFormatted"
+                                        :name="'fields[' + attribute.name + ']'"
+                                        v-bind="attrs"
+                                        class="ml-10 mt-0 pt-2 custom-placeholer-color"
+                                        :placeholder="attribute.label"
+                                        @blur="date = parseDate(dateFormatted)"
+                                        @input="setColor(attribute.name, attribute.type)"
+                                        v-on="on"
+                                />
+                            </template>
+                            <v-date-picker
+                                    v-model="date"
+                                    no-title
+                                    @input="menu1 = false"
+                                    @change="setColor(attribute.name, attribute.type)"
+                            />
+                        </v-menu>
+                    </v-flex>
+
+                    <v-flex xs12 v-if="attribute.type === 'radio'">
+                        <v-radio-group row wrap>
+                            <v-flex
+                                    lg3
+                                    md4
+                                    sm6
+                                    xs12
+                                    v-for="(option, index2) in attribute.options"
+                                    :key="index2"
+                                    @click="setColor(attribute.name, attribute.type)"
+                                >
+                                <v-radio
+                                        :value="option.value"
+                                        :label="option.label"
+                                        :name="'fields[' + option.value + ']'"
+                                />
+                            </v-flex>
+                        </v-radio-group>
+                        <div class="error--text" v-if="validationErrors &&
+                                 typeof validationErrors['fields.' + attribute.name] !== 'undefined'">
+                            <p
+                                    v-for="(error, index) in validationErrors['fields.' + attribute.name]"
+                                    :key="index"
+                            >{{error}}</p>
+                        </div>
+                    </v-flex>
+
+                    <v-flex xs12 class="pa-3" v-if="attribute.type === 'checkbox'">
+                        <v-layout row wrap>
+                            <v-flex
+                                    lg3
+                                    md4
+                                    sm6
+                                    xs12
+                                    v-for="(option, index2) in attribute.options"
+                                    :key="index2"
+                                    @click="setColor(attribute.name, attribute.type)"
+                            >
+                                <v-checkbox
+                                        :value="option.value"
+                                        :label="option.label"
+                                        :name="'fields[' + option.value + ']'"
+                                />
+                            </v-flex>
+                        </v-layout>
+                        <div
+                                class="error--text"
+                                v-if="validationErrors &&
+                                 typeof validationErrors['fields.' + attribute.name] !== 'undefined'">
+                            <p
+                                    v-for="(error, index) in validationErrors['fields.' + attribute.name]"
+                                    :key="index"
+                            >{{error}}</p>
+                        </div>
+                    </v-flex>
+                    <v-textarea
+                            v-if="attribute.type === 'textarea'"
+                            :name="attribute.name"
+                            :type="attribute.type"
+                            @input="setColor(attribute.name, attribute.type)"
+                    />
+                </v-card>
+            </div>
+
+            <div class="lead__actions">
+                <v-btn
+                        color="error"
+                        @click="reset"
+                >
+                    Reset Form
+                </v-btn>
+
+                <v-btn
+                        color="success"
+                        class="ma-10"
+                        @click="submit"
+                >
+                    Send lead
+                </v-btn>
+            </div>
+        </v-form>
+    </div>
+</template>
+
+<script>
+import axios from 'axios';
+import * as easings from 'vuetify/es5/services/goto/easing-patterns';
+
+export default {
+    props: ['id'],
+    computed: {
+        sphereById() {
+            return this.$store.getters['sphere/sphereById'](+this.id);
+        },
+        attributes() {
+            const sphere = this.sphereById;
+            if (typeof sphere !== 'undefined' && typeof sphere.attributes !== 'undefined') {
+                return sphere.attributes;
+            }
+            return null;
+        },
+        isUserLoggedIn() {
+            return this.$store.getters['user/isUserLoggedIn'];
+        },
+        getUser() {
+            return this.$store.getters['user/userObj'];
+        },
+        validationErrors() {
+            const {errors} = this.$store.getters;
+            let target = '';
+            if (errors && typeof errors !== 'undefined') {
+                if (errors.hasOwnProperty('name')) {
+                    target = '#name';
+                } else if (errors.hasOwnProperty('phone')) {
+                    target = '#phone';
+                }
+
+                if (target !== '') {
+                    this.$vuetify.goTo(target, {
+                        duration: 300,
+                        offset: 0,
+                        easing: 'easeInOutCubic',
+                    });
+                }
+                console.log(errors);
+                return errors;
+            }
+            return null;
+        },
+        computedDateFormatted() {
+            return this.formatDate(this.date);
+        },
+    },
+    watch: {
+        date(val) {
+            this.dateFormatted = this.formatDate(this.date);
+        },
+    },
+    data() {
+        return {
+            date: null,
+            dateFormatted: null,
+            menu1: false,
+            name: '',
+            phone: '',
+            alert: false,
+            alertType: null,
+            alertText: '',
+        };
+    },
+    methods: {
+        reset() {
+            this.$refs.form.reset();
+        },
+        submit() {
+            const formElement = document.getElementById('leadForm');
+            const data = new FormData(formElement);
+            data.append('api_key', process.env.VUE_APP_API_KEY);
+            try {
+                axios({
+                    method: 'post',
+                    url: `${process.env.VUE_APP_API_OLD_URL}sphere/form/data/save`,
+                    data,
+                    config: {headers: {'Content-Type': 'multipart/form-data'}},
+                }).then((response) => {
+                    //handle success
+                    const dataResp = response && response.data;
+                    console.log(dataResp);
+                    if (dataResp.status === 'success') {
+                        this.$store.dispatch('setError', null, {root: true});
+                        this.alert = true;
+                        this.alertText = 'Lead created successfully!';
+                        this.alertType = 'success';
+
+                        let route = '/';
+                        if (this.isUserLoggedIn) {
+                            route = '/history';
+                        }
+                        this.$vuetify.goTo('#alertMessage', {
+                            duration: 300,
+                            offset: 0,
+                            easing: 'easeInOutCubic',
+                        });
+                        setTimeout(() => { this.$router.push(route); }, 2000);
+                    }
+                    if (typeof dataResp.error !== 'undefined') {
+                        console.log(dataResp.error);
+                        this.$store.dispatch('setError', dataResp.error, {root: true});
+                        this.alert = true;
+                        this.alertText = 'Lead can\'t create. Please, fix some errors on form';
+                        this.alertType = 'warning';
+                    }
+                })
+                    .catch((response) => {
+                        this.$store.dispatch('setError', response.errors, {root: true});
+                        console.log(response.errors);
+                    });
+            } catch (error) {
+                console.log(error);
+                this.$store.dispatch('setError', error, {root: true});
+            }
+        },
+        formatDate(date) {
+            if (! date) return null;
+
+            const [year, month, day] = date.split('-');
+            return `${day}/${month}/${year}`;
+        },
+        parseDate(date) {
+            if (! date) return null;
+
+            const [day, month, year] = date.split('/');
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        },
+        setColor(name, type) {
+            let collections = [];
+            let val = '';
+            let field = name;
+            if (type === 'text' || type === 'tel' || type === 'email' || type === 'textarea') {
+                collections = document.getElementsByName(name);
+                val = collections[0].value;
+            } else if (type === 'date') {
+                collections = document.getElementsByName(`fields[${name}]`);
+                val = this.computedDateFormatted;
+            } else if (type === 'radio' || type === 'checkbox') {
+                field = `fields.${name}`;
+                collections = document.getElementById(name).getElementsByTagName('input');
+                //const res = [].filter.call(collections, (node) => node.checked === true);
+                for (let i = 0; i < collections.length; i++) {
+                    if (collections[i].checked) {
+                        val = 'checked';
+                        break;
+                    }
+                }
+            }
+
+            if (typeof collections[0] !== 'undefined') {
+                //console.log(val);
+                if (val !== '') {
+                    //document.getElementById(name).style.background = 'none';
+                    //console.log(document.getElementById(name));
+                    document.getElementById(name).style.backgroundColor = '#B6FFB6';
+
+                    this.deleteError(field);
+                    const errorDiv = document.getElementById(name).getElementsByClassName('error--text')[0];
+                    if (typeof errorDiv !== 'undefined') {
+                        errorDiv.style.display = 'none';
+                    }
+                } else {
+                    document.getElementById(name).style.backgroundColor = '#fff';
+                }
+            }
+        },
+        getValue(name) {
+            if (this.isUserLoggedIn) {
+                const user = this.getUser;
+                switch (name) {
+                    case 'name':
+                        return `${user.firstName} ${user.lastName}`;
+                    case 'phone':
+                        return user.phone;
+                    case 'email':
+                        return user.email;
+                    default:
+                        return null;
+                }
+            }
+            return null;
+        },
+        deleteError(field) {
+            this.$store.dispatch('delError', field, {root: true});
+        },
+    },
+    mounted() {
+        if (this.isUserLoggedIn) {
+            this.setColor('name', 'text');
+            this.setColor('phone', 'text');
+            this.setColor('email', 'text');
+        }
+        this.$store.dispatch('setError', null, {root: true});
+        /*this.$vuetify.goTo('#name', {
+            duration: 300,
+            offset: 0,
+            easing: 'easeInOutCubic',
+        });*/
+    },
+};
+</script>
+
+<style lang="scss">
+    i.ic, .ic__text {
+        height: 25px;
+        width: 25px;
+        display: inline-block;
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+    }
+
+    .ic__text {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+    }
+
+    .lead__actions {
+        text-align: center;
+    }
+
+    input[type~="text"], input[type~="tel"], input[type~="email"], textarea {
+        /*font-size: 20px;
+        font-weight: bold;*/
+    }
+
+    .custom-placeholer-color input::placeholder {
+        color: black!important;
+        opacity: 1;
+    }
+
+    .v-input__slot:after, .v-input__slot:before {
+        width: 0 !important;
+    }
+
+    .SphereLeadForm {
+        background-color: #f7f7f7;
+    }
+
+    .SphereLeadForm input:-webkit-autofill {
+        -webkit-box-shadow: inset 0 0 0 16px #B6FFB6 !important; /* Цвет фона */
+    }
+</style>
