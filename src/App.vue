@@ -51,7 +51,7 @@
         <v-app-bar app dark color="rgb(9, 33, 96)" :style="{boxShadow: 'none'}">
             <a
                     class="header__logo"
-                    :href="'#/'"
+                    @click="redirectToRoute('/')"
                     :style="{
                         background: 'url(' + logoUrl + ') no-repeat 50%',
                         backgroundSize: 'contain' + ' '
@@ -112,19 +112,21 @@
         </v-app-bar>
 
         <!-- Sizes your content based upon application components -->
-        <v-main>
+        <v-main
+                :style="{padding: '56px 0'}"
+        >
             <!-- If using vue-router -->
             <router-view/>
         </v-main>
 
         <v-footer
-                v-if="isUserLoggedIn && state === 1"
+                v-if="isUserLoggedIn && state === 2"
                 fixed
                 :style="{margin: '0', padding: '0'}"
         >
             <v-tabs
                     fixed-tabs
-                    background-color="indigo"
+                    background-color="rgb(9, 33, 96)"
                     dark
             >
                 <v-tab
@@ -142,10 +144,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import appMixin from '@/core/mixins/ApplicationMain';
+import Common from '@/core/mixins/Common';
+import AppMixin from '@/core/mixins/ApplicationMain';
 
 export default Vue.extend({
-    mixins: [appMixin],
+    mixins: [AppMixin, Common],
 });
 </script>
 

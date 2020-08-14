@@ -116,7 +116,7 @@
                         </v-menu>
                     </v-flex>
 
-                    <v-flex xs12 v-if="attribute.type === 'radio'">
+                    <v-flex xs12 v-if="attribute.type === 'radio' || attribute.type === 'select'">
                         <v-radio-group row wrap>
                             <v-flex
                                     lg3
@@ -157,6 +157,10 @@
                                 <v-checkbox
                                         :value="option.value"
                                         :label="option.label"
+                                        :style="{
+                                            height: '24px',
+                                            margin: '0'
+                                        }"
                                         :name="'fields[' + option.value + ']'"
                                 />
                             </v-flex>
@@ -181,12 +185,12 @@
             </div>
 
             <div class="lead__actions">
-                <v-btn
+                <!--<v-btn
                         color="error"
                         @click="reset"
                 >
                     Reset Form
-                </v-btn>
+                </v-btn>-->
 
                 <v-btn
                         color="success"
@@ -203,8 +207,10 @@
 <script>
 import axios from 'axios';
 import * as easings from 'vuetify/es5/services/goto/easing-patterns';
+import Common from '@/core/mixins/Common';
 
 export default {
+    mixins: [Common],
     props: ['id'],
     computed: {
         sphereById() {
@@ -216,9 +222,6 @@ export default {
                 return sphere.attributes;
             }
             return null;
-        },
-        isUserLoggedIn() {
-            return this.$store.getters['user/isUserLoggedIn'];
         },
         getUser() {
             return this.$store.getters['user/userObj'];
@@ -269,6 +272,17 @@ export default {
     methods: {
         reset() {
             this.$refs.form.reset();
+
+            this.$store.dispatch('setError', null, {root: true});
+            this.$vuetify.goTo(0, {
+                duration: 300,
+                offset: 0,
+                easing: 'easeInOutCubic',
+            });
+
+            this.attributes.forEach(attribute => {
+                this.setColor(attribute.name, attribute.type);
+            });
         },
         submit() {
             const formElement = document.getElementById('leadForm');
@@ -280,7 +294,7 @@ export default {
                     url: `${process.env.VUE_APP_API_OLD_URL}sphere/form/data/save`,
                     data,
                     config: {headers: {'Content-Type': 'multipart/form-data'}},
-                }).then((response) => {
+                }).then(response => {
                     //handle success
                     const dataResp = response && response.data;
                     console.log(dataResp);
@@ -372,9 +386,17 @@ export default {
         getValue(name) {
             if (this.isUserLoggedIn) {
                 const user = this.getUser;
+                let fName, lName;
+                let fullName = null;
                 switch (name) {
                     case 'name':
-                        return `${user.firstName} ${user.lastName}`;
+                        fName = user.firstName ? user.firstName : '';
+                        lName = user.lastName ? user.lastName : '';
+                        if (fName || lName) {
+                            console.log(234);
+                            fullName = fName + ' ' + lName;
+                        }
+                        return fullName;
                     case 'phone':
                         return user.phone;
                     case 'email':
@@ -396,11 +418,11 @@ export default {
             this.setColor('email', 'text');
         }
         this.$store.dispatch('setError', null, {root: true});
-        /*this.$vuetify.goTo('#name', {
+        this.$vuetify.goTo(0, {
             duration: 300,
             offset: 0,
             easing: 'easeInOutCubic',
-        });*/
+        });
     },
 };
 </script>
@@ -423,6 +445,7 @@ export default {
 
     .lead__actions {
         text-align: center;
+        margin-bottom: 20px;
     }
 
     input[type~="text"], input[type~="tel"], input[type~="email"], textarea {
@@ -430,12 +453,12 @@ export default {
         font-weight: bold;*/
     }
 
-    .custom-placeholer-color input::placeholder {
+    .SphereLeadForm .custom-placeholer-color input::placeholder {
         color: black!important;
         opacity: 1;
     }
 
-    .v-input__slot:after, .v-input__slot:before {
+    .SphereLeadForm .v-input__slot:after, .SphereLeadForm .v-input__slot:before {
         width: 0 !important;
     }
 

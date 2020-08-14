@@ -19,23 +19,27 @@ module.exports = {
     rules: {
         'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-        'indent': ['error', 4, {SwitchCase: 1}],
-        'max-len': ['error', {code: 120, tabWidth: 4}],
-        'quotes': ['error', 'single', {allowTemplateLiterals: true, avoidEscape: true}],
-        'object-curly-spacing': ['error', 'never'],
+        'indent': ["error", 4, { "SwitchCase": 1 }],
+        'max-len': ["error", { "code": 120, "tabWidth": 4, "ignoreUrls": true, "ignoreStrings": true }],
+        'quotes': ["error", "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
+        'object-curly-spacing': ["error", "never"],
         'no-plusplus': 0,
         'no-prototype-builtins': 0,
+        'prefer-template': 0,
         'import/prefer-default-export': 'off',
-        'spaced-comment': ['error', 'never'],
+        'spaced-comment': ["error", "never"],
         'space-unary-ops': [
             2, {
-                words: true,
-                nonwords: false,
-                overrides: {
-                    '!': true,
-                },
+                "words": true,
+                "nonwords": false,
+                "overrides": {
+                    "!": true
+                }
             }],
         'object-curly-newline': ["error", { "ImportDeclaration": "never", "ExportDeclaration": "never" }],
+        'one-var-declaration-per-line': ["error", "initializations"],
+        'one-var': ["error", { "initialized": "never" }],
+        'arrow-parens': 0,
 
         '@typescript-eslint/no-explicit-any': 'off',
     },

@@ -12,17 +12,15 @@ export default Vue.extend({
         messages: 5,
     }),
     computed: {
-        isUserLoggedIn() {
-            return this.$store.getters['user/isUserLoggedIn'];
-        },
         links() {
-            if (this.isUserLoggedIn) {
+            /*if (this.isUserLoggedIn) {
                 return null;
             }
             return [
                 {title: 'Login', icon: 'mdi-lock', url: '/login'},
                 {title: 'Registration', icon: 'mdi-face', url: '/registration'},
-            ];
+            ];*/
+            return null;
         },
         fullName() {
             return this.$store.getters['user/fullName'];

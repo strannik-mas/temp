@@ -5,27 +5,15 @@ export default Vue.extend({
     data() {
         return {
             email: '',
+            name: '',
+            lastName: '',
             password: '',
             confirmPassword: '',
             phone: '',
-            code: null,
+            code: '',
         };
     },
     computed: {
-        step() {
-            const user = this.$store.getters['user/userObj'];
-            if (typeof user !== 'undefined') {
-                switch (user.state) {
-                    case 0:
-                        return 2;
-                    case 1:
-                        return 3;
-                    default:
-                        return 1;
-                }
-            }
-            return 1;
-        },
         errors() {
             return this.$store.getters.errors;
         },
@@ -64,6 +52,9 @@ export default Vue.extend({
                 errors = this.errors.code;
             }
             //eslint-disable-next-line no-unused-expressions
+            ! this.$v.code.minLength && errors.push(`Min length of code is ${
+                this.$v.code.$params.minLength.min}. Now it is ${this.code.length}`);
+            //eslint-disable-next-line no-unused-expressions
             ! this.$v.code.numeric && errors.push('Accepts only numerics');
             //eslint-disable-next-line no-unused-expressions
             ! this.$v.code.required && errors.push('Code is required.');
@@ -94,6 +85,26 @@ export default Vue.extend({
             ! this.$v.password.required && errors.push('Password is required.');
             return errors;
         },
+        nameErrors() {
+            let errors: Array<string> = [];
+            if (! this.$v.name.$dirty) return errors;
+            if (this.errors && typeof this.errors.first_name !== 'undefined') {
+                errors = this.errors.first_name;
+            }
+            //eslint-disable-next-line no-unused-expressions
+            ! this.$v.name.required && errors.push('First Name is required.');
+            return errors;
+        },
+        lastNameErrors() {
+            let errors: Array<string> = [];
+            if (! this.$v.lastName.$dirty) return errors;
+            if (this.errors && typeof this.errors.last_name !== 'undefined') {
+                errors = this.errors.last_name;
+            }
+            //eslint-disable-next-line no-unused-expressions
+            ! this.$v.lastName.required && errors.push('Last Name is required.');
+            return errors;
+        },
     },
     methods: {
         errorsClear() {
@@ -104,6 +115,12 @@ export default Vue.extend({
         email: {
             required,
             email,
+        },
+        name: {
+            required,
+        },
+        lastName: {
+            required,
         },
         password: {
             minLength: minLength(6),
@@ -120,6 +137,7 @@ export default Vue.extend({
         code: {
             required,
             numeric,
+            minLength: minLength(5),
         },
     },
 });
