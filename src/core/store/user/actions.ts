@@ -17,6 +17,15 @@ export const actions: ActionTree<ProfileState, RootState> = {
                 if (data.status === 'success') {
                     user.state = data.state;
                     commit('profileLoaded', user);
+
+                    /**
+                     * если отключен сервис смс (то придет code в ответе сервера)
+                     * и это demo сервер, то выводим alert с кодом активации
+                     */
+                    if (process.env.VUE_APP_API_URL.indexOf('demo') >= 0 && typeof data.code !== 'undefined') {
+                        //eslint-disable-next-line no-alert
+                        alert('Activation code:' + data.code);
+                    }
                 }
             }, (error) => {
                 console.log(error.response.data.errors);
@@ -52,6 +61,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
                 }
             }, (error) => {
                 console.log(error);
+                console.log(error.response.data.errors);
                 commit('setError', error.response.data.errors, {root: true});
             });
         } catch (error) {
@@ -194,7 +204,6 @@ export const actions: ActionTree<ProfileState, RootState> = {
     },
     logoutUser({commit}) {
         localStorage.removeItem('token');
-        localStorage.removeItem('expires_token');
         commit('profileLoaded', undefined);
     },
 };

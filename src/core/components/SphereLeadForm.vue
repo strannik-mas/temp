@@ -157,8 +157,8 @@
                                 <v-checkbox
                                         :value="option.value"
                                         :label="option.label"
+                                        :hide-details="true"
                                         :style="{
-                                            height: '24px',
                                             margin: '0'
                                         }"
                                         :name="'fields[' + option.value + ']'"

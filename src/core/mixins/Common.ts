@@ -4,10 +4,11 @@ import {User} from '@/core/store/user/types';
 export default Vue.extend({
     computed: {
         isUserLoggedIn() {
-            const token: string|null = localStorage.getItem('token');
+            //const token: string|null = localStorage.getItem('token');
             const user: User = this.$store.getters['user/userObj'];
             //console.log(user);
-            if (token && typeof token !== 'undefined' && typeof user !== 'undefined') {
+            //console.log(token);
+            if (typeof user !== 'undefined' && user.state === 2) {
                 return true;
             }
             return false;
