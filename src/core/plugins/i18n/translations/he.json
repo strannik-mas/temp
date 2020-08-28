@@ -1,0 +1,45 @@
+{
+    "main_page": {
+        "open_btn": "נחשפו"
+    },
+    "main_menu": {
+        "logout": "יציאה",
+        "login": "כניסה כמשתמש קיים",
+        "languages": "שפות"
+    },
+    "tabs": {
+        "main": "ראשי",
+        "history": "היסטוריה",
+        "scheduler": "יומן פגישות"
+    },
+    "registration": {
+        "first_step": {
+            "title": "ההזנ/י את מספר הטלפון שלך",
+            "field_phone": "טלפון נייד",
+            "btn_send": "שליחה"
+        },
+        "second_step": {
+            "title": "אקטיבציה לטלפון",
+            "field_code": "קוד אישור",
+            "btn_activate": "אקטיבציה"
+        },
+        "third_step": {
+            "title": "הזנ/י דוא\"ל, שם פרטי ושם משפחה",
+            "field_email": "דוא\"ל",
+            "field_fn": "שם פרטי",
+            "field_ln": "שפם משפחה"
+        }
+    },
+    "validation": {
+        "required": "{field} נדרש",
+        "min_length": "הגודל המינימלי של {field} הוא {min_l}. עכשיו זה {cur_l}",
+        "valid": "הוזן פורמט לא תקין {field}"
+    },
+    "create_lead": {
+        "header": "יצירת פניה",
+        "sphere": "תחום",
+        "send_lead_btn": "שלח/י",
+        "success_msg": "הפניה נוצרה בהצלחה",
+        "error_msg": "הפניה לא נוצרה. נא לתקן טעויות בהזנת פרטים"
+    }
+}

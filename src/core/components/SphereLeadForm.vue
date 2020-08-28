@@ -1,7 +1,7 @@
 <template>
     <div class="SphereLeadForm pt-2" v-if="typeof sphereById !== 'undefined'">
-        <h1 class="text--primary text-center">Create lead</h1>
-        <h2 class="text--secondary text-center">Sphere: {{sphereById.sphere.name}}</h2>
+        <h1 class="text--primary text-center">{{$t("create_lead.header")}}</h1>
+        <h2 class="text--secondary text-center">{{$t("create_lead.sphere")}}: {{sphereById.sphere.name}}</h2>
         <v-alert
                 v-model="alert"
                 :type="alertType"
@@ -10,12 +10,28 @@
                 light
                 class="ma-3"
                 id="alertMessage"
-        >{{alertText}}</v-alert>
+        >
+            {{alertText}}
+            <div class="text--white mt-2" v-if="validationErrors && typeof validationErrors['name'] !== 'undefined'">
+                <p
+                        v-for="(error, index) in validationErrors['name']"
+                        :key="index"
+                >{{error}}</p>
+            </div>
+            <div class="text--white mt-2" v-if="validationErrors && typeof validationErrors['phone'] !== 'undefined'">
+                <p
+                        v-for="(error, index) in validationErrors['phone']"
+                        :key="index"
+                >{{error}}</p>
+            </div>
+        </v-alert>
         <v-form ref="form" id="leadForm" v-if="alertType !== 'success'">
             <input type="hidden" name="sphere_id" :value="sphereById.sphere.id">
             <input type="hidden" name="source" value="client">
             <div
-                    class="form-group pr-3 pl-3 pb-6"
+                    :class="'form-group pr-3 pl-3 pb-6' +
+                        ((attribute.name === 'name' || attribute.name === 'phone' || attribute.name === 'email') ?
+                         ' hide__block' : '')"
                     v-for="(attribute, index) in attributes"
                     :key="index"
             >
@@ -57,8 +73,8 @@
                         <i
                                 class="ic__text"
                                 :style="{
-                            backgroundImage: 'url(' + attribute.icon + ')'
-                        }"
+                                    backgroundImage: 'url(' + attribute.icon + ')'
+                                }"
                         />
                         <v-text-field
                             :type="attribute.type"
@@ -68,7 +84,7 @@
                             :hide-details="true"
                             @input="setColor(attribute.name, attribute.type)"
                             font-size="1em"
-                            class="ml-10 mt-0 pt-2 custom-placeholer-color"
+                            class="ml-10 mr-10 mt-0 pt-2 custom-placeholer-color"
                         />
                         <div class="error--text mt-2" v-if="validationErrors &&
                                  typeof validationErrors[attribute.name] !== 'undefined'">
@@ -100,7 +116,7 @@
                                         v-model="computedDateFormatted"
                                         :name="'fields[' + attribute.name + ']'"
                                         v-bind="attrs"
-                                        class="ml-10 mt-0 pt-2 custom-placeholer-color"
+                                        class="ml-10 mr-10 mt-0 pt-2 custom-placeholer-color"
                                         :placeholder="attribute.label"
                                         @blur="date = parseDate(dateFormatted)"
                                         @input="setColor(attribute.name, attribute.type)"
@@ -197,7 +213,7 @@
                         class="ma-10"
                         @click="submit"
                 >
-                    Send lead
+                    {{$t("create_lead.send_lead_btn")}}
                 </v-btn>
             </div>
         </v-form>
@@ -208,6 +224,7 @@
 import axios from 'axios';
 import * as easings from 'vuetify/es5/services/goto/easing-patterns';
 import Common from '@/core/mixins/Common';
+import i18n from '@/core/plugins/i18n';
 
 export default {
     mixins: [Common],
@@ -228,6 +245,7 @@ export default {
         },
         validationErrors() {
             const {errors} = this.$store.getters;
+            //console.log(errors);
             let target = '';
             if (errors && typeof errors !== 'undefined') {
                 if (errors.hasOwnProperty('name')) {
@@ -288,6 +306,7 @@ export default {
             const formElement = document.getElementById('leadForm');
             const data = new FormData(formElement);
             data.append('api_key', process.env.VUE_APP_API_KEY);
+            data.append('locale', i18n.locale);
             try {
                 axios({
                     method: 'post',
@@ -301,7 +320,7 @@ export default {
                     if (dataResp.status === 'success') {
                         this.$store.dispatch('setError', null, {root: true});
                         this.alert = true;
-                        this.alertText = 'Lead created successfully!';
+                        this.alertText = i18n.t('create_lead.success_msg');
                         this.alertType = 'success';
 
                         let route = '/';
@@ -319,7 +338,7 @@ export default {
                         console.log(dataResp.error);
                         this.$store.dispatch('setError', dataResp.error, {root: true});
                         this.alert = true;
-                        this.alertText = 'Lead can\'t create. Please, fix some errors on form';
+                        this.alertText = i18n.t('create_lead.error_msg');
                         this.alertType = 'warning';
                     }
                 })
@@ -393,7 +412,6 @@ export default {
                         fName = user.firstName ? user.firstName : '';
                         lName = user.lastName ? user.lastName : '';
                         if (fName || lName) {
-                            console.log(234);
                             fullName = fName + ' ' + lName;
                         }
                         return fullName;
@@ -411,6 +429,10 @@ export default {
             this.$store.dispatch('delError', field, {root: true});
         },
     },
+    beforeDestroy() {
+        this.$store.dispatch('setError', null, {root: true});
+        console.log(this.validationErrors);
+    },
     mounted() {
         if (this.isUserLoggedIn) {
             this.setColor('name', 'text');
@@ -418,6 +440,7 @@ export default {
             this.setColor('email', 'text');
         }
         this.$store.dispatch('setError', null, {root: true});
+        console.log(this.validationErrors);
         this.$vuetify.goTo(0, {
             duration: 300,
             offset: 0,
@@ -439,7 +462,7 @@ export default {
 
     .ic__text {
         position: absolute;
-        left: 10px;
+        margin: 0 10px;
         top: 10px;
     }
 
@@ -468,5 +491,9 @@ export default {
 
     .SphereLeadForm input:-webkit-autofill {
         -webkit-box-shadow: inset 0 0 0 16px #B6FFB6 !important; /* Цвет фона */
+    }
+
+    .hide__block {
+        display: none;
     }
 </style>

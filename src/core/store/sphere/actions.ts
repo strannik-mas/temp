@@ -1,5 +1,6 @@
 import {ActionTree} from 'vuex';
 import axios, {AxiosResponse} from 'axios';
+import i18n from '@/core/plugins/i18n';
 import {Sphere, SphereState} from './types';
 import {RootState} from '../types';
 
@@ -13,7 +14,7 @@ export const actions: ActionTree<SphereState, RootState> = {
         try {
             await axios.get(url, {
                 //eslint-disable-next-line @typescript-eslint/camelcase
-                params: {api_key: process.env.VUE_APP_API_KEY},
+                params: {api_key: process.env.VUE_APP_API_KEY, locale: i18n.locale},
             }).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
                 console.log(data);

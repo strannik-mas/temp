@@ -1,15 +1,19 @@
 <template>
     <div class="register__phone">
         <v-row justify="center">
-            <v-dialog v-model="dialog" persistent max-width="600px">
+            <v-dialog v-model="dialog" max-width="600px" @click:outside="closeDialog">
                 <v-card>
                     <v-card-title class="headline">
-                        <span class="headline">Enter your phone</span>
+                        <span class="headline">{{$t("registration.first_step.title")}}</span>
+                        <v-spacer/>
+                        <v-btn icon light @click="closeDialog">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
                     </v-card-title>
                     <v-card-text>
                         <v-form>
                             <v-text-field
-                                    label="Phone"
+                                    :label="$t('registration.first_step.field_phone')"
                                     name="phone"
                                     prepend-icon="mdi-phone"
                                     type="tel"
@@ -27,19 +31,23 @@
                                 color="primary"
                                 :disabled="$v.phone.$invalid || loading2"
                                 @click="registerPhone"
-                        >Send</v-btn>
+                        >{{$t("registration.first_step.btn_send")}}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-            <v-dialog v-model="dialog2" persistent max-width="600px">
+            <v-dialog v-model="dialog2" max-width="600px" @click:outside="closeDialog, dialog2=false">
                 <v-card>
                     <v-card-title class="headline">
-                        <span class="headline">Confirmation phone</span>
+                        <span class="headline">{{$t("registration.second_step.title")}}</span>
+                        <v-spacer/>
+                        <v-btn icon light @click="closeDialog, dialog2=false">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
                     </v-card-title>
                     <v-card-text>
                         <v-form>
                             <v-text-field
-                                    label="Activation Code"
+                                    :label="$t('registration.second_step.field_code')"
                                     name="code"
                                     prepend-icon="mdi-email-check"
                                     type="number"
@@ -58,20 +66,24 @@
                                 @click="onActivate"
                                 :loading="loading2"
                                 :disabled="$v.code.$invalid || loading2"
-                        >Activate
+                        >{{$t("registration.second_step.btn_activate")}}
                         </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-            <v-dialog v-model="dialog3" persistent max-width="600px">
+            <v-dialog v-model="dialog3" max-width="600px" @click:outside="closeDialog, dialog3=false">
                 <v-card>
                     <v-card-title class="headline">
-                        <span class="headline">Enter your email, first name and last name</span>
+                        <span class="headline">{{$t("registration.third_step.title")}}</span>
+                        <v-spacer/>
+                        <v-btn icon light @click="closeDialog, dialog3=false">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
                     </v-card-title>
                     <v-card-text>
                         <v-form>
                             <v-text-field
-                                    label="Email"
+                                    :label="$t('registration.third_step.field_email')"
                                     name="email"
                                     prepend-icon="mdi-email"
                                     type="email"
@@ -81,7 +93,7 @@
                                     v-model="email"
                             />
                             <v-text-field
-                                    label="First name"
+                                    :label="$t('registration.third_step.field_fn')"
                                     name="first_name"
                                     prepend-icon="mdi-account"
                                     type="text"
@@ -91,7 +103,7 @@
                                     v-model="name"
                             />
                             <v-text-field
-                                    label="Last name"
+                                    :label="$t('registration.third_step.field_ln')"
                                     name="last_name"
                                     prepend-icon="mdi-account"
                                     type="text"
@@ -110,7 +122,7 @@
                                 :disabled="$v.email.$invalid || $v.name.$invalid || $v.lastName.$invalid ||
                                                 loading2"
                                 @click="registerUserByPhone"
-                        >Send</v-btn>
+                        >{{$t("registration.first_step.btn_send")}}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -211,6 +223,10 @@ export default {
                 this.loading2 = false;
             })
                 .catch((err) => console.log(err));
+        },
+        closeDialog() {
+            this.$emit('dialogClose', false);
+            this.dialog = true;
         },
     },
 };

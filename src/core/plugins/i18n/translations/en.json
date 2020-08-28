@@ -1,0 +1,45 @@
+{
+    "main_page": {
+        "open_btn": "Open"
+    },
+    "main_menu": {
+        "logout": "Logout",
+        "login": "Login",
+        "languages": "Languages"
+    },
+    "tabs": {
+        "main": "main",
+        "history": "history",
+        "scheduler": "scheduler"
+    },
+    "registration": {
+        "first_step": {
+            "title": "Enter your phone",
+            "field_phone": "Phone",
+            "btn_send": "Send"
+        },
+        "second_step": {
+            "title": "Confirmation phone",
+            "field_code": "Activation code",
+            "btn_activate": "Activate"
+        },
+        "third_step": {
+            "title": "Enter your email, first name and last name",
+            "field_email": "Email",
+            "field_fn": "First name",
+            "field_ln": "Last name"
+        }
+    },
+    "validation": {
+        "required": "{field} is required",
+        "min_length": "Min length of {field} is {min_l}. Now it is {cur_l}",
+        "valid": "Must be valid {field}"
+    },
+    "create_lead": {
+        "header": "Create lead",
+        "sphere": "Sphere",
+        "send_lead_btn": "Send lead",
+        "success_msg": "Lead created successfully!",
+        "error_msg": "Lead can't create. Please, fix some errors on form"
+    }
+}

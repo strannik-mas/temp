@@ -1,5 +1,7 @@
 import {ActionTree} from 'vuex';
+//import axios from '@/core/plugins/axios';
 import axios, {AxiosResponse} from 'axios';
+import i18n from '@/core/plugins/i18n';
 import {ProfileState, User} from './types';
 import {RootState} from '../types';
 
@@ -8,10 +10,13 @@ export const actions: ActionTree<ProfileState, RootState> = {
         commit('clearError', null, {root: true});
         const url = `${process.env.VUE_APP_API_URL}auth/client/registerPhoneStepOne`;
 
+        let dataRequest = {locale: i18n.locale};
+        dataRequest = Object.assign(dataRequest, payload);
+
         const user = payload;
 
         try {
-            await axios.post(url, payload).then((response: AxiosResponse<any>) => {
+            await axios.post(url, dataRequest).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
                 console.log(data);
                 if (data.status === 'success') {
@@ -39,9 +44,12 @@ export const actions: ActionTree<ProfileState, RootState> = {
     async activateUserPhone({commit, getters}, payload: {code: number; phone: string; api_key: string}) {
         commit('clearError', null, {root: true});
 
+        let dataRequest = {locale: i18n.locale};
+        dataRequest = Object.assign(dataRequest, payload);
+
         const url = `${process.env.VUE_APP_API_URL}auth/client/activationPhone`;
         try {
-            await axios.post(url, payload).then((response: AxiosResponse<any>) => {
+            await axios.post(url, dataRequest).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
                 console.log(data);
                 const user = getters.userObj;
@@ -72,9 +80,12 @@ export const actions: ActionTree<ProfileState, RootState> = {
         commit('clearError', null, {root: true});
         const user = payload;
 
+        let dataRequest = {locale: i18n.locale};
+        dataRequest = Object.assign(dataRequest, payload);
+
         const url = `${process.env.VUE_APP_API_URL}auth/client/registerUserByPhone`;
         try {
-            await axios.post(url, payload).then((response: AxiosResponse<any>) => {
+            await axios.post(url, dataRequest).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
                 console.log(data);
                 if (data.status === 'success') {

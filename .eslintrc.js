@@ -40,8 +40,11 @@ module.exports = {
         'one-var-declaration-per-line': ["error", "initializations"],
         'one-var': ["error", { "initialized": "never" }],
         'arrow-parens': 0,
+        'default-case': 0,
+        'no-lonely-if': 0,
 
         '@typescript-eslint/no-explicit-any': 'off',
+        "@typescript-eslint/no-var-requires": "off"
     },
     overrides: [
         {

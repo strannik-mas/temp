@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import {required, email, minLength, sameAs, numeric} from 'vuelidate/lib/validators';
+import i18n from '@/core/plugins/i18n';
+import {TranslateResult} from 'vue-i18n';
 
 export default Vue.extend({
     data() {
@@ -27,10 +29,17 @@ export default Vue.extend({
                 errors = this.errors.phone;
             }
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.phone.minLength && errors.push(`Min length of phone is ${
-                this.$v.phone.$params.minLength.min}. Now it is ${this.phone.length}`);
+            ! this.$v.phone.minLength && errors.push(String(this.translate('validation.min_length', {
+                field: String(this.translate('registration.first_step.field_phone')).toLowerCase(),
+                //eslint-disable-next-line @typescript-eslint/camelcase
+                min_l: this.$v.phone.$params.minLength.min,
+                //eslint-disable-next-line @typescript-eslint/camelcase
+                cur_l: this.phone.length,
+            })));
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.phone.required && errors.push('Phone is required.');
+            ! this.$v.phone.required && errors.push(String(this.translate('validation.required', {
+                field: this.translate('registration.first_step.field_phone'),
+            })));
             return errors;
         },
         confirmPasswordErrors() {
@@ -52,12 +61,17 @@ export default Vue.extend({
                 errors = this.errors.code;
             }
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.code.minLength && errors.push(`Min length of code is ${
-                this.$v.code.$params.minLength.min}. Now it is ${this.code.length}`);
+            ! this.$v.code.minLength && errors.push(String(this.translate('validation.min_length', {
+                field: String(this.translate('registration.second_step.field_code')).toLowerCase(),
+                //eslint-disable-next-line @typescript-eslint/camelcase
+                min_l: this.$v.code.$params.minLength.min,
+                //eslint-disable-next-line @typescript-eslint/camelcase
+                cur_l: this.code.length,
+            })));
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.code.numeric && errors.push('Accepts only numerics');
-            //eslint-disable-next-line no-unused-expressions
-            ! this.$v.code.required && errors.push('Code is required.');
+            ! this.$v.code.required && errors.push(String(this.translate('validation.required', {
+                field: this.translate('registration.second_step.field_code'),
+            })));
             return errors;
         },
         emailErrors() {
@@ -67,9 +81,13 @@ export default Vue.extend({
                 errors = this.errors.email;
             }
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.email.email && errors.push('Must be valid e-mail');
+            ! this.$v.email.email && errors.push(String(this.translate('validation.valid', {
+                field: String(this.translate('registration.third_step.field_email')).toLowerCase(),
+            })));
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.email.required && errors.push('E-mail is required');
+            ! this.$v.email.required && errors.push(String(this.translate('validation.required', {
+                field: this.translate('registration.third_step.field_email'),
+            })));
             return errors;
         },
         passwordErrors() {
@@ -92,7 +110,9 @@ export default Vue.extend({
                 errors = this.errors.first_name;
             }
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.name.required && errors.push('First Name is required.');
+            ! this.$v.name.required && errors.push(String(this.translate('validation.required', {
+                field: this.translate('registration.third_step.field_fn'),
+            })));
             return errors;
         },
         lastNameErrors() {
@@ -102,13 +122,18 @@ export default Vue.extend({
                 errors = this.errors.last_name;
             }
             //eslint-disable-next-line no-unused-expressions
-            ! this.$v.lastName.required && errors.push('Last Name is required.');
+            ! this.$v.lastName.required && errors.push(String(this.translate('validation.required', {
+                field: this.translate('registration.third_step.field_ln'),
+            })));
             return errors;
         },
     },
     methods: {
         errorsClear() {
             this.$store.dispatch('setError', null, {root: true});
+        },
+        translate(key: string, options?: object): TranslateResult {
+            return i18n.t(key, options);
         },
     },
     validations: {

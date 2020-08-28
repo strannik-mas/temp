@@ -6,6 +6,7 @@ import Login from '@/core/components/Auth/Login.vue';
 import Registration from '@/core/components/Auth/Registration.vue';
 import SphereLeadForm from '@/core/components/SphereLeadForm.vue';
 import LoadStartData from './start_data';
+import AuthGuard from './auth_guard';
 
 export const routes: Array<RouteConfig> = [
     {
@@ -28,16 +29,19 @@ export const routes: Array<RouteConfig> = [
         path: '/history',
         name: 'history',
         component: History,
+        beforeEnter: AuthGuard,
     },
     {
         path: '/scheduler',
         name: 'scheduler',
         component: Scheduler,
+        beforeEnter: AuthGuard,
     },
     {
         path: '/create/lead/:id',
         props: true,
         name: 'lead',
         component: SphereLeadForm,
+        beforeEnter: AuthGuard,
     },
 ];

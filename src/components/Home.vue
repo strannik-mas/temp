@@ -16,7 +16,7 @@
                             max-width="400"
                     >
                         <a
-                                @click="redirectToRoute('/create/lead/' + sphere.sphere.id)"
+                                @click="needRegister = true, redirectToRoute('/create/lead/' + sphere.sphere.id)"
                         >
                             <v-img
                                     class="white--text align-end"
@@ -38,21 +38,28 @@
                             <v-btn
                                     text
                                     :to="'/create/lead/' + sphere.sphere.id"
+                                    @click="needRegister = true"
                             >
-                                Open
+                                {{$t('main_page.open_btn')}}
                             </v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-flex>
             </v-layout>
         </v-container>
+        <PhoneRegistration
+                v-if="! this.isUserLoggedIn && needRegister"
+                @dialogClose="needRegister = $event"
+        />
     </div>
 </template>
 
 <script>
 import Common from '@/core/mixins/Common';
+import PhoneRegistration from '@/core/components/Auth/PhoneRegistration.vue';
 
 export default {
+    components: {PhoneRegistration},
     mixins: [Common],
     computed: {
         loading() {
@@ -61,6 +68,9 @@ export default {
         spheres() {
             return this.$store.getters['sphere/getUniversalSpheres'];
         },
+    },
+    data() {
+        return {needRegister: false};
     },
 };
 </script>
