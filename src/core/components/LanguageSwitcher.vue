@@ -55,15 +55,15 @@ export default Vue.extend({
     computed: {
         flag1() {
             if (i18n.locale === 'en') {
-                return '/img/isr.svg';
+                return 'img/isr.svg';
             }
-            return '/img/en.svg';
+            return 'img/en.svg';
         },
         flag2() {
             if (i18n.locale === 'en') {
-                return '/img/en.svg';
+                return 'img/en.svg';
             }
-            return '/img/isr.svg';
+            return 'img/isr.svg';
         },
     },
 });

@@ -166,8 +166,6 @@ export default {
             this.loading2 = true;
             const user = {
                 phone: this.phone,
-                //eslint-disable-next-line @typescript-eslint/camelcase
-                api_key: process.env.VUE_APP_API_KEY,
             };
             this.$store.dispatch('user/registerPhone', user).then(() => {
                 console.log(this.step);
@@ -185,8 +183,6 @@ export default {
                 const payload = {
                     code: this.code,
                     phone: this.phone,
-                    //eslint-disable-next-line @typescript-eslint/camelcase
-                    api_key: process.env.VUE_APP_API_KEY,
                 };
 
                 this.$store.dispatch('user/activateUserPhone', payload)
@@ -211,8 +207,6 @@ export default {
                 firstName: this.name,
                 lastName: this.lastName,
                 device: 1,
-                //eslint-disable-next-line @typescript-eslint/camelcase
-                api_key: process.env.VUE_APP_API_KEY,
             };
 
             this.$store.dispatch('user/registerUserByPhone', user).then(() => {
@@ -232,6 +226,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
 </style>

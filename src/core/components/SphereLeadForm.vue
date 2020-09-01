@@ -135,9 +135,6 @@
                     <v-flex xs12 v-if="attribute.type === 'radio' || attribute.type === 'select'">
                         <v-radio-group row wrap>
                             <v-flex
-                                    lg3
-                                    md4
-                                    sm6
                                     xs12
                                     v-for="(option, index2) in attribute.options"
                                     :key="index2"
@@ -147,6 +144,9 @@
                                         :value="option.value"
                                         :label="option.label"
                                         :name="'fields[' + option.value + ']'"
+                                        :style="{
+                                            margin: '0 12px'
+                                        }"
                                 />
                             </v-flex>
                         </v-radio-group>
@@ -162,9 +162,6 @@
                     <v-flex xs12 class="pa-3" v-if="attribute.type === 'checkbox'">
                         <v-layout row wrap>
                             <v-flex
-                                    lg3
-                                    md4
-                                    sm6
                                     xs12
                                     v-for="(option, index2) in attribute.options"
                                     :key="index2"
@@ -175,7 +172,7 @@
                                         :label="option.label"
                                         :hide-details="true"
                                         :style="{
-                                            margin: '0'
+                                            margin: '0 12px'
                                         }"
                                         :name="'fields[' + option.value + ']'"
                                 />

@@ -26,7 +26,7 @@
                             </v-img>
                         </a>
 
-                        <v-card-title>{{sphere.sphere.name}}</v-card-title>
+                        <v-card-title class="text-h6">{{sphere.sphere.name}}</v-card-title>
                         <!--<v-card-subtitle class="pb-0">Number 10</v-card-subtitle>-->
 
                         <v-card-text class="text--primary">

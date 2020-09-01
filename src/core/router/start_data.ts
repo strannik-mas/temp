@@ -7,11 +7,7 @@ export default function (to: any, from: any, next: any) {
 
     if (token && typeof token !== 'undefined' && typeof user === 'undefined') {
         //если токен есть, а юзера нет, находим юзера
-        store.dispatch('user/refreshUser', {
-            token,
-            //eslint-disable-next-line @typescript-eslint/camelcase
-            api_key: process.env.VUE_APP_API_KEY,
-        }).then((r) => next());
+        store.dispatch('user/refreshUser').then((r) => next());
     } else {
         next();
     }

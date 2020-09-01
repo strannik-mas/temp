@@ -171,6 +171,10 @@
                         v-for="(tab, index) in tabs"
                         :key="index"
                         :to="tab.url"
+                        :style="{
+                            fontSize: '16px',
+                            lineHeight: '20px'
+                        }"
                 >
                     {{tab.title}}
                 </v-tab>
@@ -246,14 +250,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-    @import url('https://fonts.googleapis.com/earlyaccess/opensanshebrew.css');
-
-    body {
-        font-family: "Open Sans Hebrew", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-        "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        min-width: 320px;
-    }
-
     .header__logo {
         width: 150px;
         height: 40px;

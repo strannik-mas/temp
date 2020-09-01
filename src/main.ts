@@ -6,6 +6,7 @@ import router from './router';
 import store from './core/store';
 import vuetify from './core/plugins/vuetify';
 import i18n from './core/plugins/i18n';
+import '@/core/styles/global.scss';
 
 Vue.config.productionTip = false;
 Vue.use(Vuelidate);
