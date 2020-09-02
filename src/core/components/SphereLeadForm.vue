@@ -28,6 +28,7 @@
         <v-form ref="form" id="leadForm" v-if="alertType !== 'success'">
             <input type="hidden" name="sphere_id" :value="sphereById.sphere.id">
             <input type="hidden" name="source" value="client">
+            <input type="hidden" name="user_id" :value="getUser.id">
             <div
                     :class="'form-group pr-3 pl-3 pb-6' +
                         ((attribute.name === 'name' || attribute.name === 'phone' || attribute.name === 'email') ?
@@ -321,7 +322,7 @@ export default {
                         this.alertType = 'success';
 
                         let route = '/';
-                        if (this.isUserLoggedIn) {
+                        if (this.isUserLoggedIn()) {
                             route = '/history';
                         }
                         this.$vuetify.goTo('#alertMessage', {
@@ -400,7 +401,7 @@ export default {
             }
         },
         getValue(name) {
-            if (this.isUserLoggedIn) {
+            if (this.isUserLoggedIn()) {
                 const user = this.getUser;
                 let fName, lName;
                 let fullName = null;
@@ -431,7 +432,7 @@ export default {
         console.log(this.validationErrors);
     },
     mounted() {
-        if (this.isUserLoggedIn) {
+        if (this.isUserLoggedIn()) {
             this.setColor('name', 'text');
             this.setColor('phone', 'text');
             this.setColor('email', 'text');

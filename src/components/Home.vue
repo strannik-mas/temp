@@ -48,7 +48,7 @@
             </v-layout>
         </v-container>
         <PhoneRegistration
-                v-if="! this.isUserLoggedIn && needRegister"
+                v-if="! this.isUserLoggedIn() && needRegister"
                 @dialogClose="needRegister = $event"
         />
     </div>

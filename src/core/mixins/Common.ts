@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {User} from '@/core/store/user/types';
 
 export default Vue.extend({
-    computed: {
+    methods: {
         isUserLoggedIn() {
             //const token: string|null = localStorage.getItem('token');
             const user: User = this.$store.getters['user/userObj'];
@@ -13,8 +13,6 @@ export default Vue.extend({
             }
             return false;
         },
-    },
-    methods: {
         redirectToRoute(route: string) {
             if (this.$router.currentRoute.path !== route) {
                 this.$router.push(route);

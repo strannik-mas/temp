@@ -81,6 +81,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
                 if (data.status === 'success') {
                     localStorage.setItem('token', data.token);
                     user.state = data.state;
+                    user.id = data.id;
                     commit('profileLoaded', user);
                 }
             }, (error) => {

@@ -8,6 +8,7 @@ export interface User {
     api_key?: string;
     state?: number;
     device?: number;
+    id?: number;
 }
 
 export interface ProfileState {
