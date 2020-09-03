@@ -53,6 +53,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
                         user.firstName = data.first_name;
                         user.lastName = data.last_name;
                         user.state = data.state;
+                        user.id = data.id;
                         commit('profileLoaded', user);
                     } else {
                         commit('changeUserState', 1);

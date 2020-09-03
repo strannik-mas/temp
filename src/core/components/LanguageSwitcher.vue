@@ -27,7 +27,7 @@ import Vue from 'vue';
 import i18n from '@/core/plugins/i18n';
 
 export default Vue.extend({
-    props: ['heightIcon', 'widthIcon', 'needPadding'],
+    props: ['heightIcon', 'widthIcon', 'needPadding', 'enFlagPath', 'isrFlagPath'],
     data() {
         return {
             selectedLanguage: null,
@@ -48,22 +48,21 @@ export default Vue.extend({
                     localStorage.setItem('lng', 'en');
                     break;
             }
-            this.$emit('componentUpdate', true);
             this.$store.dispatch('sphere/fetchUniversalSpheres');
         },
     },
     computed: {
         flag1() {
             if (i18n.locale === 'en') {
-                return '/img/isr.svg';
+                return this.isrFlagPath;
             }
-            return '/img/en.svg';
+            return this.enFlagPath;
         },
         flag2() {
             if (i18n.locale === 'en') {
-                return '/img/en.svg';
+                return this.enFlagPath;
             }
-            return '/img/isr.svg';
+            return this.isrFlagPath;
         },
     },
 });

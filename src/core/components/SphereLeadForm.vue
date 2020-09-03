@@ -315,6 +315,11 @@ export default {
                     //handle success
                     const dataResp = response && response.data;
                     console.log(dataResp);
+                    this.$vuetify.goTo('#alertMessage', {
+                        duration: 300,
+                        offset: 0,
+                        easing: 'easeInOutCubic',
+                    });
                     if (dataResp.status === 'success') {
                         this.$store.dispatch('setError', null, {root: true});
                         this.alert = true;
@@ -325,14 +330,13 @@ export default {
                         if (this.isUserLoggedIn()) {
                             route = '/history';
                         }
-                        this.$vuetify.goTo('#alertMessage', {
-                            duration: 300,
-                            offset: 0,
-                            easing: 'easeInOutCubic',
-                        });
                         setTimeout(() => { this.$router.push(route); }, 2000);
+                    } else if (dataResp.status === 'error') {
+                        this.alert = true;
+                        this.alertText = dataResp.error.message;
+                        this.alertType = 'error';
                     }
-                    if (typeof dataResp.error !== 'undefined') {
+                    if (typeof dataResp.error !== 'undefined' && dataResp.status !== 'error') {
                         console.log(dataResp.error);
                         this.$store.dispatch('setError', dataResp.error, {root: true});
                         this.alert = true;
