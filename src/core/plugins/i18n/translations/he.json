@@ -9,8 +9,9 @@
     },
     "tabs": {
         "main": "ראשי",
-        "history": "היסטוריה",
-        "scheduler": "יומן פגישות"
+        "requests": "requests",
+        "scheduler": "יומן פגישות",
+        "history": "היסטוריה"
     },
     "registration": {
         "first_step": {
@@ -41,5 +42,28 @@
         "send_lead_btn": "שלח/י",
         "success_msg": "הפניה נוצרה בהצלחה",
         "error_msg": "הפניה לא נוצרה. נא לתקן טעויות בהזנת פרטים"
+    },
+    "upload_files_modal": {
+        "title": "Upload files dialog",
+        "label": "File input",
+        "description": "Select files to upload",
+        "counter_files": "File(s)",
+        "btn_upl": "Upload",
+        "btn_show_dialog": "Upload documents",
+        "btn_cancel": "Cancel"
+    },
+    "lead_info_modal": {
+        "title": "Your lead data",
+        "btn_show_dialog": "lead info"
+    },
+    "file_delete_modal": {
+        "title": "Confirmation dialog",
+        "msg": "Are you sure to delete this file from the lead?",
+        "btn_cancel": "Cancel",
+        "btn_yes": "Yes"
+    },
+    "lead_list": {
+        "viewed_tooltip": "Number of viewed leads",
+        "purchased_tooltip": "Number of purchased leads"
     }
 }

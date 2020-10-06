@@ -1,21 +1,24 @@
 import {RouteConfig} from 'vue-router';
-import History from '@/components/History.vue';
+import History from '@/core/components/Lead/History.vue';
 import Scheduler from '@/components/Scheduler.vue';
 import Home from '@/components/Home.vue';
-import Login from '@/core/components/Auth/Login.vue';
-import Registration from '@/core/components/Auth/Registration.vue';
-import SphereLeadForm from '@/core/components/SphereLeadForm.vue';
-import LoadStartData from './start_data';
+// import Login from '@/core/components/Auth/Login.vue';
+// import Registration from '@/core/components/Auth/Registration.vue';
+import SphereLeadForm from '@/core/components/Lead/SphereLeadForm.vue';
+import Requests from '@/core/components/Lead/Requests.vue';
+import LeadDetails from '@/core/components/Lead/LeadDetails.vue';
 import AuthGuard from './auth_guard';
+import CheckSphereAttributes from './check_sphere_attributes';
+import CheckLeads from './check_leads';
+import CheckLeadDetails from './check_lead_details';
 
 export const routes: Array<RouteConfig> = [
     {
         path: '/',
         name: 'home',
         component: Home,
-        beforeEnter: LoadStartData,
     },
-    {
+    /*{
         path: '/login',
         name: 'login',
         component: Login,
@@ -24,12 +27,18 @@ export const routes: Array<RouteConfig> = [
         path: '/registration',
         name: 'reg',
         component: Registration,
+    },*/
+    {
+        path: '/requests',
+        name: 'requests',
+        component: Requests,
+        beforeEnter: CheckLeads,
     },
     {
         path: '/history',
         name: 'history',
         component: History,
-        beforeEnter: AuthGuard,
+        beforeEnter: CheckLeads,
     },
     {
         path: '/scheduler',
@@ -38,10 +47,17 @@ export const routes: Array<RouteConfig> = [
         beforeEnter: AuthGuard,
     },
     {
-        path: '/create/lead/:id',
+        path: '/create/lead/:id/:leadId?',
         props: true,
-        name: 'lead',
+        name: 'leadCreate',
         component: SphereLeadForm,
-        beforeEnter: AuthGuard,
+        beforeEnter: CheckSphereAttributes,
+    },
+    {
+        path: '/show/lead/:id/:sphereId',
+        props: true,
+        name: 'showLead',
+        component: LeadDetails,
+        beforeEnter: CheckLeadDetails,
     },
 ];

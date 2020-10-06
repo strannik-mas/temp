@@ -1,7 +1,6 @@
 import {ActionTree} from 'vuex';
 import {AxiosResponse} from 'axios';
 import axios from '@/core/plugins/axios';
-import i18n from '@/core/plugins/i18n';
 import {Sphere, SphereState} from './types';
 import {RootState} from '../types';
 
@@ -10,25 +9,13 @@ export const actions: ActionTree<SphereState, RootState> = {
         commit('clearError', null, {root: true});
         commit('setLoading', true, {root: true});
 
-        const url = `${process.env.VUE_APP_API_URL}client/get/spheres`;
+        const url = `client/get/spheres`;
         const resultSpheres: Array<Sphere> = [];
         try {
-            await axios.get(url, {
-                //eslint-disable-next-line @typescript-eslint/camelcase
-                params: {api_key: process.env.VUE_APP_API_KEY, locale: i18n.locale},
-            }).then((response: AxiosResponse<any>) => {
+            await axios.get(url).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
                 console.log(data);
                 if (data.status === 'success' && typeof data.spheres !== 'undefined') {
-                    /*Object.keys(data.spheres).forEach((key: any) => {
-                        const sphereObj: Sphere = {
-                            id: data.spheres[key].sphere.id,
-                            name: data.spheres[key].sphere.name,
-                            description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, nesciunt.',
-                            imageSrc: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-                        };
-                        resultSpheres.push(sphereObj);
-                    });*/
                     commit('spheresLoaded', data.spheres);
                 }
             }, (error) => {
@@ -42,7 +29,34 @@ export const actions: ActionTree<SphereState, RootState> = {
         } catch (error) {
             console.log(error);
             commit('setError', error, {root: true});
-            throw error;
+        } finally {
+            commit('setLoading', false, {root: true});
+        }
+    },
+    async setSphereAttributes({commit}, payload: {id: number}) {
+        commit('clearError', null, {root: true});
+        commit('setLoading', true, {root: true});
+
+        const url = `client/get/sphere/attributes`;
+        const sphereId = payload.id;
+
+        try {
+            await axios.get(url, {params: {id: sphereId}}).then((response: AxiosResponse<any>) => {
+                const data = response && response.data;
+                const {attributes} = data;
+                console.log(data);
+                commit('updateSphere', {attributes, sphereId});
+            }, (error) => {
+                console.log(error);
+                if (error.response !== undefined && error.response.data !== undefined) {
+                    commit('setError', error.response.data.errors, {root: true});
+                } else {
+                    commit('setError', error, {root: true});
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            commit('setError', error, {root: true});
         } finally {
             commit('setLoading', false, {root: true});
         }

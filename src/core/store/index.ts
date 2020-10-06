@@ -3,6 +3,7 @@ import Vuex, {StoreOptions} from 'vuex';
 import {RootState, ValidationErrors} from './types';
 import {user} from './user';
 import {sphere} from './sphere';
+import {lead} from './lead';
 
 Vue.use(Vuex);
 
@@ -60,7 +61,7 @@ const store: StoreOptions<RootState> = {
         },
     },
     modules: {
-        user, sphere,
+        user, sphere, lead,
     },
 };
 

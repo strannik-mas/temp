@@ -12,4 +12,10 @@ export const getters: GetterTree<ProfileState, RootState> = {
     userObj(state) {
         return state.user;
     },
+    userId(state): number|null {
+        if (state.user !== undefined && state.user.id !== undefined) {
+            return state.user.id;
+        }
+        return null;
+    },
 };

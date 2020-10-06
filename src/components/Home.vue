@@ -52,19 +52,18 @@
                 @dialogClose="needRegister = $event"
         />
     </div>
+    <CircularSpinner v-else/>
 </template>
 
 <script>
 import Common from '@/core/mixins/Common';
 import PhoneRegistration from '@/core/components/Auth/PhoneRegistration.vue';
+import CircularSpinner from '@/core/components/Utils/CircularSpinner.vue';
 
 export default {
-    components: {PhoneRegistration},
+    components: {PhoneRegistration, CircularSpinner},
     mixins: [Common],
     computed: {
-        loading() {
-            return this.$store.getters.loading;
-        },
         spheres() {
             return this.$store.getters['sphere/getUniversalSpheres'];
         },

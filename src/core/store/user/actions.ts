@@ -7,7 +7,7 @@ import {RootState} from '../types';
 export const actions: ActionTree<ProfileState, RootState> = {
     async registerPhone({commit}, payload: User) {
         commit('clearError', null, {root: true});
-        const url = `${process.env.VUE_APP_API_URL}auth/client/registerPhoneStepOne`;
+        const url = 'auth/client/registerPhoneStepOne';
 
         const user = payload;
 
@@ -37,10 +37,10 @@ export const actions: ActionTree<ProfileState, RootState> = {
             commit('setError', e, {root: true});
         }
     },
-    async activateUserPhone({commit, getters}, payload: {code: number; phone: string; api_key: string}) {
+    async activateUserPhone({commit, getters}, payload: {code: number; phone: string}) {
         commit('clearError', null, {root: true});
 
-        const url = `${process.env.VUE_APP_API_URL}auth/client/activationPhone`;
+        const url = 'auth/client/activationPhone';
         try {
             await axios.post(url, payload).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
@@ -74,7 +74,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
         commit('clearError', null, {root: true});
         const user = payload;
 
-        const url = `${process.env.VUE_APP_API_URL}auth/client/registerUserByPhone`;
+        const url = 'auth/client/registerUserByPhone';
         try {
             await axios.post(url, payload).then((response: AxiosResponse<any>) => {
                 const data = response && response.data;
@@ -97,7 +97,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
     },
     async refreshUser({commit}) {
         commit('clearError', null, {root: true});
-        const url = `${process.env.VUE_APP_API_URL}auth/client/refreshClient`;
+        const url = 'auth/client/refreshClient';
 
         try {
             await axios.post(url, {}).then((response: AxiosResponse<any>) => {
@@ -119,6 +119,11 @@ export const actions: ActionTree<ProfileState, RootState> = {
             localStorage.removeItem('token');
         }
     },
+    /**
+     * методы старой регистрации - первый шаг
+     * @param commit
+     * @param payload
+     */
     async registerUser({commit}, payload: User) {
         commit('clearError', null, {root: true});
         commit('setLoading', true, {root: true});
@@ -147,6 +152,11 @@ export const actions: ActionTree<ProfileState, RootState> = {
             commit('setLoading', false, {root: true});
         }
     },
+    /**
+     * методы старой регистрации - активация email
+     * @param commit
+     * @param payload
+     */
     async activateUserEmail({commit}, payload: {code: number}) {
         commit('clearError', null, {root: true});
         commit('setLoading', true, {root: true});
@@ -172,6 +182,11 @@ export const actions: ActionTree<ProfileState, RootState> = {
             commit('setLoading', false, {root: true});
         }
     },
+    /**
+     * методы старой регистрации - логин
+     * @param commit
+     * @param payload
+     */
     async loginUser({commit}, payload: User) {
         commit('clearError', null, {root: true});
         commit('setLoading', true, {root: true});

@@ -27,7 +27,7 @@ module.exports = {
         'no-prototype-builtins': 0,
         'prefer-template': 0,
         'import/prefer-default-export': 'off',
-        'spaced-comment': ["error", "never"],
+        'spaced-comment': 0,
         'space-unary-ops': [
             2, {
                 "words": true,
@@ -44,6 +44,7 @@ module.exports = {
         'no-lonely-if': 0,
 
         '@typescript-eslint/no-explicit-any': 'off',
+        "@typescript-eslint/camelcase": "off",
         "@typescript-eslint/no-var-requires": "off"
     },
     overrides: [

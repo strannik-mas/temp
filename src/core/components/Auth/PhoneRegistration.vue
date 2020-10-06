@@ -49,7 +49,7 @@
                             <v-text-field
                                     :label="$t('registration.second_step.field_code')"
                                     name="code"
-                                    prepend-icon="mdi-email-check"
+                                    prepend-icon="mdi-phone-check"
                                     type="number"
                                     v-model="code"
                                     required

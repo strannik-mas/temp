@@ -108,7 +108,7 @@
                 <v-btn
                         text
                         @click="needRegister = ! needRegister"
-                        v-else-if="! isUserLoggedIn() && noToken"
+                        v-else-if="(! isUserLoggedIn() && noToken) || showLogin"
                 >
                     <v-icon center>mdi-login</v-icon>
                     {{$t('main_menu.login')}}
@@ -126,8 +126,15 @@
                 </v-btn>
                 <v-btn
                         text
+                        @click="onLogout"
+                        v-if="isUserLoggedIn()"
+                >
+                    <v-icon left>mdi-exit-to-app</v-icon>
+                </v-btn>
+                <v-btn
+                        text
                         @click="needRegister = true"
-                        v-if="! isUserLoggedIn() && noToken"
+                        v-else-if="(! isUserLoggedIn() && noToken) || showLogin"
                 >
                     <v-icon center>mdi-login</v-icon>
                 </v-btn>
@@ -146,7 +153,7 @@
 
         <!-- Sizes your content based upon application components -->
         <v-main
-                :style="{padding: '56px 0'}"
+                :style="{padding: '56px 0', backgroundColor: '#f7f7f7'}"
         >
             <!-- If using vue-router -->
             <router-view/>
@@ -181,7 +188,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import PhoneRegistration from '@/core/components/Auth/PhoneRegistration.vue';
-import LanguageSwitcher from '@/core/components/LanguageSwitcher.vue';
+import LanguageSwitcher from '@/core/components/Utils/LanguageSwitcher.vue';
 import Common from '@/core/mixins/Common';
 import i18n from '@/core/plugins/i18n';
 
@@ -218,8 +225,9 @@ export default Vue.extend({
         tabs() {
             return [
                 {title: i18n.t('tabs.main'), url: '/'},
-                {title: i18n.t('tabs.history'), url: '/history'},
+                {title: i18n.t('tabs.requests'), url: '/requests'},
                 {title: i18n.t('tabs.scheduler'), url: '/scheduler'},
+                {title: i18n.t('tabs.history'), url: '/history'},
             ];
         },
         noToken() {

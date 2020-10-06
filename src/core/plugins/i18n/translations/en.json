@@ -9,8 +9,9 @@
     },
     "tabs": {
         "main": "main",
-        "history": "history",
-        "scheduler": "scheduler"
+        "requests": "requests",
+        "scheduler": "scheduler",
+        "history": "history"
     },
     "registration": {
         "first_step": {
@@ -41,5 +42,35 @@
         "send_lead_btn": "Send lead",
         "success_msg": "Lead created successfully!",
         "error_msg": "Lead can't create. Please, fix some errors on form"
+    },
+    "upload_files_modal": {
+        "title": "Upload files dialog",
+        "label": "File input",
+        "description": "Select files to upload",
+        "counter_files": "File(s)",
+        "btn_upl": "Upload",
+        "btn_show_dialog": "Upload documents",
+        "btn_cancel": "Cancel"
+    },
+    "lead_info_modal": {
+        "title": "Your lead data",
+        "btn_show_dialog": "lead info"
+    },
+    "file_delete_modal": {
+        "title": "Confirmation dialog",
+        "msg": "Are you sure to delete this file from the lead?",
+        "btn_cancel": "Cancel",
+        "btn_yes": "Yes"
+    },
+    "lead_list": {
+        "viewed_tooltip": "Number of viewed leads",
+        "purchased_tooltip": "Number of Purchased leads"
+    },
+    "lead_details_page": {
+        "alert_delete_success": "File deleted successfully!",
+        "alert_upload_success": "File(s) uploaded successfully!",
+        "documents_header": "Uploaded documents for this lead",
+        "agents_header": "Agents which bought lead",
+        "bids_header": "Bids for this lead"
     }
 }

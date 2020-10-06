@@ -11,6 +11,8 @@ import '@/core/styles/global.scss';
 Vue.config.productionTip = false;
 Vue.use(Vuelidate);
 
+export const eventEmitter = new Vue();
+
 new Vue({
     router,
     store,
