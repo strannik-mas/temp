@@ -68,7 +68,7 @@
                     }"
             />
             <v-spacer/>
-            <v-badge
+            <!--<v-badge
                     :class="checkRightPosition ? 'mr-2' : 'ml-2'"
                     v-if="isUserLoggedIn()"
                     :content="messages"
@@ -77,7 +77,7 @@
                     overlap
             >
                 <v-icon>mdi-email</v-icon>
-            </v-badge>
+            </v-badge>-->
             <v-toolbar-items class="hidden-sm-and-down">
                 <v-btn
                         text
@@ -151,6 +151,12 @@
                 @dialogClose="needRegister = $event, showLogin = false"
         />
 
+        <SpheresListModal
+                v-if="! $router.currentRoute.path.includes('create/lead')"
+                class="v-btn--absolute"
+                :style="getStyleForContactBtn"
+        />
+
         <!-- Sizes your content based upon application components -->
         <v-main
                 :style="{padding: '56px 0', backgroundColor: '#f7f7f7'}"
@@ -168,12 +174,16 @@
                     fixed-tabs
                     background-color="rgb(9, 33, 96)"
                     dark
+                    optional
             >
                 <v-tab
                         v-for="(tab, index) in tabs"
                         :key="index"
                         :to="tab.url"
+                        :disabled="tab.url === '/scheduler'"
                         :style="{
+                            margin: '0',
+                            padding: '0',
                             fontSize: '16px',
                             lineHeight: '20px'
                         }"
@@ -188,6 +198,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import PhoneRegistration from '@/core/components/Auth/PhoneRegistration.vue';
+import SpheresListModal from '@/core/components/Lead/SpheresListModal.vue';
 import LanguageSwitcher from '@/core/components/Utils/LanguageSwitcher.vue';
 import Common from '@/core/mixins/Common';
 import i18n from '@/core/plugins/i18n';
@@ -197,6 +208,7 @@ export default Vue.extend({
     components: {
         appPhoneRegistration: PhoneRegistration,
         LanguageSwitcher,
+        SpheresListModal,
     },
     data: () => ({
         drawer: false,
@@ -224,7 +236,6 @@ export default Vue.extend({
         },
         tabs() {
             return [
-                {title: i18n.t('tabs.main'), url: '/'},
                 {title: i18n.t('tabs.requests'), url: '/requests'},
                 {title: i18n.t('tabs.scheduler'), url: '/scheduler'},
                 {title: i18n.t('tabs.history'), url: '/history'},
@@ -232,6 +243,12 @@ export default Vue.extend({
         },
         noToken() {
             return localStorage.getItem('token') === null;
+        },
+        getStyleForContactBtn() {
+            if (i18n.locale === 'en') {
+                return {zIndex: '9', top: '75vh', right: '100px'};
+            }
+            return {zIndex: '9', top: '75vh', left: '100px'};
         },
     },
     methods: {

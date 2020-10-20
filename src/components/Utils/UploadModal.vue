@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-dialog v-model="dialogActivator" max-width="600px">
+        <v-dialog v-model="dialogActivator" max-width="600px" :style="{zIndex: '10'}">
             <template v-slot:activator="{ on, attrs }">
                 <v-btn
                         color="primary"
@@ -33,6 +33,7 @@
                             outlined
                             small-chips
                             :show-size="1000"
+                            truncate-length="8"
                     >
                         <template v-slot:selection="{ index, text }">
                             <v-chip
@@ -81,7 +82,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer/>
-                    <v-btn
+                    <!--<v-btn
                             icon
                             :loading="loadingCamera"
                             color="grey"
@@ -98,7 +99,7 @@
                             @click="getCameraFile(1)"
                     >
                         <v-icon>mdi-video</v-icon>
-                    </v-btn>
+                    </v-btn>-->
                     <v-btn
                             :loading="loading2"
                             color="primary"
@@ -170,6 +171,7 @@ export default {
                         this.loading2 = false;
                     }, (error) => {
                         console.log('An error has occurred: Code = ' + error.code);
+                        console.log('Error message: ' + error.exception);
                         console.log('upload error source ' + error.source);
                         console.log('upload error target ' + error.target);
                         console.log('http_status ' + error.http_status);
@@ -215,6 +217,7 @@ export default {
                 cameraDirection: Camera.Direction.BACK,
                 // eslint-disable-next-line no-undef
                 mediaType: cameraMediaType,
+                saveToPhotoAlbum: true,
                 // eslint-disable-next-line no-undef
                 //encodingType: Camera.EncodingType.JPEG,
             };
@@ -222,7 +225,7 @@ export default {
                 this.imgSuccess = true;
                 //this.imgSrc = imgURI;
 
-                window.resolveLocalFileSystemURI(imgURI, (fileEntry) => {
+                window.resolveLocalFileSystemURL(imgURI, (fileEntry) => {
                     this.imgSrc = fileEntry.toInternalURL();
                     /*const file = fetch(fileEntry.toURL())
                         .then((e) => e.file())
@@ -240,27 +243,34 @@ export default {
                     console.log(file);*/
                     //this.files.push(file);
                     fileEntry.file((file) => {
-                        /*file.webkitRelativePath = '';*/
+                        this.files.push(file);
+                        /*file.webkitRelativePath = '';
                         // eslint-disable-next-line no-param-reassign
-                        file.imgURI = fileEntry.toInternalURL();
+                        //file.imgURI = fileEntry.toInternalURL();
                         //file.imgURI = imgURI;
                         console.log(file);
-                        console.log(imgURI);
-                        console.log(fileEntry.toInternalURL());
-                        this.files.push(file);
-                        /*const fileObj = Object.create(
+                        // console.log(imgURI);
+                        // console.log(fileEntry.toInternalURL());
+                        //this.files.push(file);
+                        const fileObj = Object.create(
                             new File(),
                             Object.getOwnPropertyDescriptors(file),
                         );
-                        // eslint-disable-next-line no-param-reassign,no-proto
+                        fileObj.webkitRelativePath = imgURI;
+                        // fileObj.webkitRelativePath = fileEntry.toURL().replace('file:///', 'file://');
+                        delete fileObj.start;
+                        delete fileObj.end;
+                        delete fileObj.localURL;
+                        console.log(fileObj);
+                        this.files.push(fileObj);*/
+                        /*// eslint-disable-next-line no-param-reassign,no-proto
                         //file.__proto__ = fileObj;
                         //file.setPrototypeOf(file, File);
                         console.log(file);
                         console.log(fileObj);
-                        this.files.push(fileObj);
 
                         const reader = new FileReader();
-                        reader.readAsArrayBuffer(file);
+                        //reader.readAsArrayBuffer(file);
 
                         // reader.onloadend = () => {
                         //     const newFile = new File(reader.result, 'camera.jpg');
@@ -274,12 +284,13 @@ export default {
 
                         reader.onloadend = (e) => {
                             const imgBlob = new Blob([this.result], {type: 'image/jpeg'});
-                            const newFile = new File(imgBlob, 'camera12.jpg');
+                            const newFile = new File([this.result], file.name, Object.getOwnPropertyDescriptors(file));
                             console.log(imgBlob);
-                            console.log(newFile);
+                            console.log(file);
+                            console.log('newFile: ', newFile);
                             this.files.push(newFile);
                         };
-                        //reader.readAsArrayBuffer(file);*/
+                        reader.readAsArrayBuffer(file);*/
                     }, (error) => {
                         console.log(error);
                     });

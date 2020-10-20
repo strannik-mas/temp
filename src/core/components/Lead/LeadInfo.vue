@@ -13,7 +13,7 @@
                     {{$t('lead_info_modal.btn_show_dialog')}}
                 </v-btn>
             </template>
-            <v-card>
+            <v-card style="z-index: 9999;">
                 <v-card-title class="headline text-center">
                     <span>{{$t("lead_info_modal.title")}}</span>
                     <v-spacer/>

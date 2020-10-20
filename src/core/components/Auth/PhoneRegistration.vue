@@ -186,7 +186,8 @@ export default {
                 };
 
                 this.$store.dispatch('user/activateUserPhone', payload)
-                    .then(() => {
+                    .then((response) => {
+                        console.log(response);
                         console.log(this.step);
                         this.loading2 = false;
                         if (this.step !== 2) {
@@ -194,6 +195,11 @@ export default {
                         }
                         if (this.step === 3) {
                             this.dialog3 = true;
+                        }
+
+                        //если регистрация прошла
+                        if (this.step === 4) {
+                            this.redirectAfterLogin();
                         }
                     })
                     .catch((err) => console.log(err));
@@ -213,6 +219,7 @@ export default {
                 console.log(this.step);
                 if (this.step === 4) {
                     this.dialog3 = false;
+                    this.redirectAfterLogin();
                 }
                 this.loading2 = false;
             })
@@ -221,6 +228,15 @@ export default {
         closeDialog() {
             this.$emit('dialogClose', false);
             this.dialog = true;
+        },
+        redirectAfterLogin() {
+            const route = localStorage.getItem('sphereRoute');
+            if (route && route.length > 0) {
+                this.$router.push(route);
+                localStorage.removeItem('sphereRoute');
+            } else {
+                this.$router.push('requests');
+            }
         },
     },
 };

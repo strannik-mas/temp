@@ -1,7 +1,8 @@
 import {RouteConfig} from 'vue-router';
 import History from '@/core/components/Lead/History.vue';
 import Scheduler from '@/components/Scheduler.vue';
-import Home from '@/components/Home.vue';
+//import Home from '@/components/Home.vue';
+import HomeVideo from '@/core/components/HomeVideo.vue';
 // import Login from '@/core/components/Auth/Login.vue';
 // import Registration from '@/core/components/Auth/Registration.vue';
 import SphereLeadForm from '@/core/components/Lead/SphereLeadForm.vue';
@@ -16,7 +17,7 @@ export const routes: Array<RouteConfig> = [
     {
         path: '/',
         name: 'home',
-        component: Home,
+        component: HomeVideo,
     },
     /*{
         path: '/login',

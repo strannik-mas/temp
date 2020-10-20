@@ -1,6 +1,9 @@
 {
     "main_page": {
-        "open_btn": "נחשפו"
+        "open_btn": "נחשפו",
+        "contact_fab": "Contact",
+        "select_sphere_modal_title": "Select sphere",
+        "select_sphere_modal_search": "Search sphere"
     },
     "main_menu": {
         "logout": "יציאה",
@@ -65,5 +68,12 @@
     "lead_list": {
         "viewed_tooltip": "Number of viewed leads",
         "purchased_tooltip": "Number of purchased leads"
+    },
+    "lead_details_page": {
+        "alert_delete_success": "File deleted successfully!",
+        "alert_upload_success": "File(s) uploaded successfully!",
+        "documents_header": "Uploaded documents for this lead",
+        "agents_header": "Agents which bought lead",
+        "bids_header": "Bids for this lead"
     }
 }
